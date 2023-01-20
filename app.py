@@ -97,7 +97,7 @@ def main():
 
 
 def output_csv(df: pd.DataFrame) -> None:
-    df.to_csv("all_comms_sites.csv", index=False)
+    df.to_csv("all_comms_sites.csv", index=False, lineterminator="\n")
 
 
 addr_cnt = 0
