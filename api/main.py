@@ -93,7 +93,7 @@ async def get_sites(request: Request):
 
 
 app = Starlette(
-    debug=True,
+    # debug=True,
     routes=[
         Route("/", hello_world),
         Route("/sites", get_sites),
