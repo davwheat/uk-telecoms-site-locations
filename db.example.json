@@ -1,0 +1,7 @@
+{
+  "host": "db",
+  "port": 3306,
+  "user": "user",
+  "password": "pass",
+  "database": "uk_voa_business_rates"
+}

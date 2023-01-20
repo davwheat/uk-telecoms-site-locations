@@ -1,3 +1,11 @@
 *.csv
 !all_comms_sites.csv
 *.zip
+api/venv/
+
+docker/db/data/*
+!docker/db/data/.gitkeep
+
+**/__pycache__
+
+db.json

@@ -14,6 +14,16 @@ This repo uses the dataset available for download from the VOA, filters it to in
 
 > You can also download a precompiled dataset from this repo.
 
+## Backend API
+
+This repo also contains a Docker compose file that uses a MySQL database and Python API powered by Starlette to supply site information via an HTTP API. The API is exposed by default on port 5000.
+
+A list of sites is available by going to `127.0.0.1:5000/sites` and passing the query params `ne_lat`, `ne_lng`, `sw_lat` and `sw_lng` to form an appropriate bounding box.
+
+The container will automatically import the dataset from `all_comms_sites.csv` into the MySQL database when it starts, as well as using the credentials in `db.json`.
+
+An example `db.json` file is provided (`db.example.json`). You should copy and rename this file to `db.json` and make appropriate changes to it and `docker-compose.json` to change the MySQL username and password if needed. This is optional as, by default, the database can only be accessed within the Docker compose network rather than the system or the wider network.
+
 ## License
 
 ### Dataset

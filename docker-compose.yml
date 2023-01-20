@@ -1,0 +1,51 @@
+version: "3.9"
+
+services:
+  db:
+    container_name: uk-voa-rates-db
+    image: mysql:8
+    restart: unless-stopped
+    command: >
+      bash -c "
+      chmod 644 /etc/mysql/conf.d/*.cnf
+      && /entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+      "
+    environment:
+      # MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: uk_voa_business_rates
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - "3306"
+    volumes:
+      - "./docker/db/data:/var/lib/mysql"
+      - "./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf"
+      - "./docker/db/sql:/docker-entrypoint-initdb.d"
+      - "./all_comms_sites.csv:/tmpdata/all_comms_sites.csv"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "-u$MYSQL_USER",
+          "-p$MYSQL_PASSWORD",
+          "ping",
+          "-h",
+          "localhost",
+        ]
+
+  web-api:
+    container_name: uk-voa-rates-web-api
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    ports:
+      - "5000:80"
+    volumes:
+      - "./api:/app"
+      - "./db.json:/db.json"
+    depends_on:
+      db:
+        condition: service_healthy

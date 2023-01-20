@@ -1,0 +1,10 @@
+FROM tiangolo/uvicorn-gunicorn-starlette:python3.11
+
+COPY ./api/requirements.txt /requirements.txt
+RUN pip install -r /requirements.txt
+
+WORKDIR /app
+
+# ENV PYTHONUNBUFFERED 1
+
+CMD [ "/start-reload.sh" ]
