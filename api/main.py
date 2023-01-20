@@ -10,6 +10,9 @@ from decimal import Decimal
 from typing import List, Dict, Any
 
 
+cors_headers = {"Access-Control-Allow-Origin": "*"}
+
+
 class DecimalEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, Decimal):
@@ -61,7 +64,8 @@ using location data from <a href="https://www.openstreetmap.org/copyright">OpenS
 and business rates information from HMRC's Valuation Office Agency
 <a href="https://www.tax.service.gov.uk/business-rates-find/terms-and-conditions">under license</a>.
 <p><a href="https://github.com/davwheat/uk-telecoms-site-locations">This project is open source on GitHub!</a></p>
-"""
+""",
+        headers=cors_headers,
     )
 
 
@@ -84,6 +88,7 @@ async def get_sites(request: Request):
                     "error": "You must provide values for parameters: ne_lat, ne_lng, sw_lat, sw_lng"
                 },
                 status_code=400,
+                headers=cors_headers,
             )
     except ValueError:
         return DecimalCompatJSONResponse(
@@ -91,6 +96,7 @@ async def get_sites(request: Request):
                 "error": "Parameters must be valid numbers: ne_lat, ne_lng, sw_lat, sw_lng"
             },
             status_code=400,
+            headers=cors_headers,
         )
 
     all_records = await get_nodes_within_bounds(ne_lat, ne_lng, sw_lat, sw_lng)
@@ -99,7 +105,8 @@ async def get_sites(request: Request):
         {
             "license": "Data © Valuation Office Agency (https://www.tax.service.gov.uk/business-rates-find/terms-and-conditions). Positional data © OpenStreetMap contributors (https://www.openstreetmap.org/copyright).",
             "data": all_records,
-        }
+        },
+        headers=cors_headers,
     )
 
 
