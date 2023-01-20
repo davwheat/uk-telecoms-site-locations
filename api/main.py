@@ -72,14 +72,25 @@ async def get_sites(request: Request):
     sw_lat = request.query_params.get("sw_lat", 0)
     sw_lng = request.query_params.get("sw_lng", 0)
 
-    if ne_lat and ne_lng and sw_lat and sw_lng:
-        ne_lat = float(ne_lat)
-        ne_lng = float(ne_lng)
-        sw_lat = float(sw_lat)
-        sw_lng = float(sw_lng)
-    else:
-        raise ValueError(
-            "You must provide values for parameters: ne_lat, ne_lng, sw_lat, sw_lng"
+    try:
+        if ne_lat and ne_lng and sw_lat and sw_lng:
+            ne_lat = float(ne_lat)
+            ne_lng = float(ne_lng)
+            sw_lat = float(sw_lat)
+            sw_lng = float(sw_lng)
+        else:
+            return DecimalCompatJSONResponse(
+                {
+                    "error": "You must provide values for parameters: ne_lat, ne_lng, sw_lat, sw_lng"
+                },
+                status_code=400,
+            )
+    except ValueError:
+        return DecimalCompatJSONResponse(
+            {
+                "error": "Parameters must be valid numbers: ne_lat, ne_lng, sw_lat, sw_lng"
+            },
+            status_code=400,
         )
 
     all_records = await get_nodes_within_bounds(ne_lat, ne_lng, sw_lat, sw_lng)
