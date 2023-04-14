@@ -49,3 +49,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    healthcheck:
+      test: curl --fail http://127.0.0.1/sites?ne_lat=50.97&ne_lng=-0.11&sw_lat=50.95&sw_lng=-0.14 || exit 1
+      interval: 60s
+      start_period: 30s
+      timeout: 10s
