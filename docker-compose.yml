@@ -34,6 +34,7 @@ services:
           "-h",
           "localhost",
         ]
+      start_period: 60s
 
   web-api:
     container_name: uk-voa-rates-web-api
