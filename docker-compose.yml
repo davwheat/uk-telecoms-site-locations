@@ -34,6 +34,7 @@ services:
           "-h",
           "localhost",
         ]
+      interval: 60s
       start_period: 30s
 
   web-api:
@@ -52,6 +53,6 @@ services:
         condition: service_healthy
     healthcheck:
       test: "curl --fail 'http://127.0.0.1/sites?ne_lat=50.97&ne_lng=-0.11&sw_lat=50.95&sw_lng=-0.14&__docker_healthcheck' || exit 1"
-      interval: 5s
+      interval: 60s
       start_period: 15s
       timeout: 10s
